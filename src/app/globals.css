@@ -9,6 +9,8 @@
   --color-rosa-500: #E91E8F;
   --color-rosa-600: #C4167A;
   --color-rosa-700: #9E1163;
+  --color-lilas-400: #A78BFA;
+  --color-lilas-500: #8B5CF6;
   --color-verde: #22C55E;
   --color-vermelho: #EF4444;
   --color-amarelo: #F59E0B;
@@ -16,7 +18,6 @@
 
 body {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  background-color: var(--color-rosa-50);
   min-height: 100dvh;
 }
 
@@ -24,5 +25,99 @@ body {
 @supports (padding: env(safe-area-inset-bottom)) {
   .nav-bottom {
     padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* ── Keyframes ── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  60% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes bounceTap {
+  0% { transform: scale(1); }
+  40% { transform: scale(0.88); }
+  70% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+@keyframes dotsLoading {
+  0%, 80%, 100% { transform: scale(0.4); opacity: 0.3; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes heightIn {
+  from { opacity: 0; max-height: 0; }
+  to { opacity: 1; max-height: 600px; }
+}
+
+/* ── Animation utilities ── */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out both;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.35s ease-out both;
+}
+
+.animate-bounce-in {
+  animation: bounceIn 0.35s ease-out both;
+}
+
+.animate-bounce-tap {
+  animation: bounceTap 0.25s ease-out;
+}
+
+.animate-height-in {
+  animation: heightIn 0.35s ease-out both;
+  overflow: hidden;
+}
+
+/* Staggered children */
+.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 40ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 80ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 120ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 160ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 200ms; }
+.stagger-children > *:nth-child(7) { animation-delay: 240ms; }
+.stagger-children > *:nth-child(8) { animation-delay: 280ms; }
+.stagger-children > *:nth-child(9) { animation-delay: 320ms; }
+.stagger-children > *:nth-child(10) { animation-delay: 360ms; }
+.stagger-children > *:nth-child(n+11) { animation-delay: 400ms; }
+
+/* Dots loading animation */
+.dots-loading span {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin: 0 3px;
+  border-radius: 50%;
+  background-color: currentColor;
+  animation: dotsLoading 1.2s infinite ease-in-out;
+}
+.dots-loading span:nth-child(1) { animation-delay: 0ms; }
+.dots-loading span:nth-child(2) { animation-delay: 160ms; }
+.dots-loading span:nth-child(3) { animation-delay: 320ms; }
+
+/* Desktop background pattern */
+.desktop-bg {
+  background-color: #FFF0F5;
+}
+@media (min-width: 480px) {
+  .desktop-bg {
+    background: linear-gradient(135deg, #FFE0EB 0%, #F5E6FF 40%, #FFE0EB 70%, #F0E0FF 100%);
+    background-attachment: fixed;
   }
 }

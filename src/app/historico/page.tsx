@@ -62,7 +62,7 @@ export default function HistoricoPage() {
   }
 
   // Build calendar grid
-  const firstDay = new Date(year, month, 1).getDay(); // 0=Sun
+  const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const days: (number | null)[] = [];
   for (let i = 0; i < firstDay; i++) days.push(null);
@@ -80,23 +80,25 @@ export default function HistoricoPage() {
     : null;
 
   return (
-    <div className="min-h-dvh bg-rosa-50 pb-20">
+    <div className="min-h-dvh pb-20">
       {/* Header */}
-      <div className="bg-gradient-to-br from-rosa-500 to-rosa-600 text-white px-5 pt-12 pb-6 rounded-b-3xl">
-        <h1 className="text-xl font-bold">Histórico</h1>
+      <div className="bg-gradient-to-br from-rosa-500 via-rosa-400 to-lilas-400 text-white px-5 pt-12 pb-6 rounded-b-3xl">
+        <h1 className="text-xl font-bold font-[var(--font-nunito)]">Histórico</h1>
         <div className="flex items-center justify-between mt-3">
           <button
             onClick={() => navigate(-1)}
-            className="w-9 h-9 flex items-center justify-center rounded-full bg-white/20 active:scale-95"
+            className="w-9 h-9 flex items-center justify-center rounded-full bg-white/20
+              active:scale-95 transition-all duration-200"
           >
             <ChevronLeft size={18} />
           </button>
-          <span className="text-lg font-semibold">
+          <span className="text-lg font-semibold font-[var(--font-nunito)]">
             {MONTHS[month]} {year}
           </span>
           <button
             onClick={() => navigate(1)}
-            className="w-9 h-9 flex items-center justify-center rounded-full bg-white/20 active:scale-95"
+            className="w-9 h-9 flex items-center justify-center rounded-full bg-white/20
+              active:scale-95 transition-all duration-200"
           >
             <ChevronRight size={18} />
           </button>
@@ -105,7 +107,7 @@ export default function HistoricoPage() {
 
       <div className="px-4 mt-4">
         {/* Calendar grid */}
-        <div className="bg-white rounded-2xl p-3 border border-rosa-200 shadow-sm">
+        <div className="bg-white rounded-2xl p-3.5 border border-rosa-100 shadow-sm animate-slide-up">
           <div className="grid grid-cols-7 gap-1 mb-2">
             {["D", "S", "T", "Q", "Q", "S", "S"].map((d, i) => (
               <div key={i} className="text-center text-xs font-medium text-gray-400 py-1">
@@ -128,20 +130,27 @@ export default function HistoricoPage() {
               return (
                 <button
                   key={i}
-                  onClick={() => hasData && setSelectedDay(String(day))}
+                  onClick={() => hasData && setSelectedDay(
+                    selectedDay === String(day) ? null : String(day)
+                  )}
                   className={cn(
-                    "aspect-square rounded-xl flex flex-col items-center justify-center text-sm transition-all",
-                    isSelected && "ring-2 ring-rosa-500",
-                    hasData && rate >= 0.7 && "bg-green-100 text-green-700 font-semibold",
-                    hasData && rate >= 0.4 && rate < 0.7 && "bg-amber-100 text-amber-700 font-semibold",
-                    hasData && rate < 0.4 && "bg-red-100 text-red-700 font-semibold",
+                    "aspect-square rounded-xl flex flex-col items-center justify-center text-sm transition-all duration-200",
+                    isSelected && "ring-2 ring-rosa-500 shadow-sm",
+                    hasData && rate >= 0.7 && "bg-green-50 text-green-700 font-semibold",
+                    hasData && rate >= 0.4 && rate < 0.7 && "bg-amber-50 text-amber-700 font-semibold",
+                    hasData && rate < 0.4 && "bg-red-50 text-red-700 font-semibold",
                     !hasData && "text-gray-400"
                   )}
                   disabled={!hasData}
                 >
                   {day}
                   {hasData && (
-                    <div className="w-1.5 h-1.5 rounded-full mt-0.5 bg-current opacity-50" />
+                    <div className={cn(
+                      "w-1.5 h-1.5 rounded-full mt-0.5",
+                      rate >= 0.7 && "bg-green-400",
+                      rate >= 0.4 && rate < 0.7 && "bg-amber-400",
+                      rate < 0.4 && "bg-red-400",
+                    )} />
                   )}
                 </button>
               );
@@ -151,9 +160,9 @@ export default function HistoricoPage() {
 
         {/* Selected day detail */}
         {selectedAgenda && (
-          <div className="mt-4 bg-white rounded-2xl border border-rosa-200 overflow-hidden shadow-sm">
-            <div className="px-4 py-3 bg-rosa-50 border-b border-rosa-200 flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-rosa-600">
+          <div className="mt-4 bg-white rounded-2xl border border-rosa-100 overflow-hidden shadow-sm animate-height-in">
+            <div className="px-4 py-3 bg-rosa-50 border-b border-rosa-100 flex items-center justify-between">
+              <h3 className="text-sm font-semibold text-rosa-600 font-[var(--font-nunito)]">
                 {selectedAgenda.clinic}
               </h3>
               <div className="flex gap-2 text-xs">
@@ -169,9 +178,9 @@ export default function HistoricoPage() {
               </div>
             </div>
 
-            <div className="divide-y divide-gray-50">
+            <div className="divide-y divide-gray-50 stagger-children">
               {selectedAgenda.appointments.map((apt) => (
-                <div key={apt.id} className="flex items-center gap-3 px-4 py-2.5">
+                <div key={apt.id} className="flex items-center gap-3 px-4 py-2.5 animate-slide-up">
                   <span className="text-xs font-bold text-rosa-500 w-12">{apt.time}</span>
                   <span className="text-sm text-gray-700 flex-1">{apt.patientName}</span>
                   <span>
@@ -186,7 +195,10 @@ export default function HistoricoPage() {
         )}
 
         {!loading && agendas.length === 0 && (
-          <div className="text-center py-10">
+          <div className="text-center py-10 animate-fade-in">
+            <div className="w-16 h-16 rounded-full bg-rosa-100 flex items-center justify-center mx-auto mb-4">
+              <span className="text-2xl">📅</span>
+            </div>
             <p className="text-gray-400 text-sm">Nenhuma agenda neste mês</p>
           </div>
         )}

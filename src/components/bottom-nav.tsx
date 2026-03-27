@@ -15,25 +15,27 @@ export function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="nav-bottom fixed bottom-0 left-0 right-0 bg-white border-t border-rosa-200 flex justify-around items-center h-16 z-50">
-      {navItems.map((item) => {
-        const isActive = pathname === item.href;
-        return (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={cn(
-              "flex flex-col items-center gap-0.5 px-4 py-2 rounded-lg transition-colors",
-              isActive
-                ? "text-rosa-500"
-                : "text-gray-400 hover:text-rosa-400"
-            )}
-          >
-            <item.icon size={22} strokeWidth={isActive ? 2.5 : 2} />
-            <span className="text-xs font-medium">{item.label}</span>
-          </Link>
-        );
-      })}
-    </nav>
+    <div className="fixed bottom-0 left-0 right-0 z-50">
+      <nav className="nav-bottom mx-auto max-w-md bg-white/80 backdrop-blur-xl border-t border-rosa-100 flex justify-around items-center h-16">
+        {navItems.map((item) => {
+          const isActive = pathname === item.href;
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                "flex flex-col items-center gap-0.5 px-5 py-1.5 rounded-xl transition-all duration-200",
+                isActive
+                  ? "text-rosa-500 bg-rosa-100/70"
+                  : "text-gray-400 hover:text-rosa-400 active:scale-95"
+              )}
+            >
+              <item.icon size={22} strokeWidth={isActive ? 2.5 : 2} />
+              <span className="text-[11px] font-semibold">{item.label}</span>
+            </Link>
+          );
+        })}
+      </nav>
+    </div>
   );
 }

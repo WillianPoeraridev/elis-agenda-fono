@@ -49,11 +49,13 @@ export default function DashboardPage() {
   const pendentes = allAppointments.filter((a) => a.attended === null).length;
 
   return (
-    <div className="min-h-dvh bg-rosa-50 pb-20">
+    <div className="min-h-dvh pb-20">
       {/* Header */}
-      <div className="bg-gradient-to-br from-rosa-500 to-rosa-600 text-white px-5 pt-12 pb-6 rounded-b-3xl">
-        <p className="text-rosa-100 text-sm">Olá, Elis 🌸</p>
-        <h1 className="text-xl font-bold mt-1 capitalize">{formatDate(today)}</h1>
+      <div className="bg-gradient-to-br from-rosa-500 via-rosa-400 to-lilas-400 text-white px-5 pt-12 pb-6 rounded-b-3xl animate-fade-in">
+        <p className="text-white/80 text-sm">Olá, Elis 🌸</p>
+        <h1 className="text-xl font-bold mt-1 capitalize font-[var(--font-nunito)]">
+          {formatDate(today)}
+        </h1>
 
         {allAppointments.length > 0 && (
           <div className="flex gap-3 mt-4">
@@ -80,32 +82,39 @@ export default function DashboardPage() {
       {/* Content */}
       <div className="px-4 mt-4">
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-20">
-            <div className="w-8 h-8 border-3 border-rosa-300 border-t-rosa-500 rounded-full animate-spin" />
-            <p className="text-sm text-gray-400 mt-3">Carregando agenda...</p>
+          <div className="flex flex-col items-center justify-center py-20 animate-fade-in">
+            <div className="dots-loading text-rosa-400 mb-3">
+              <span /><span /><span />
+            </div>
+            <p className="text-sm text-gray-400">Carregando agenda...</p>
           </div>
         ) : agendas.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="text-5xl mb-4">📋</div>
-            <h2 className="text-lg font-semibold text-gray-700">Nenhuma agenda hoje</h2>
+          <div className="flex flex-col items-center justify-center py-16 text-center animate-slide-up">
+            <div className="w-20 h-20 rounded-full bg-rosa-100 flex items-center justify-center mb-5">
+              <span className="text-4xl">📋</span>
+            </div>
+            <h2 className="text-lg font-semibold text-gray-700 font-[var(--font-nunito)]">
+              Nenhuma agenda hoje
+            </h2>
             <p className="text-sm text-gray-400 mt-1 mb-6">
               Envie a foto da agenda para começar
             </p>
             <button
               onClick={() => router.push("/upload")}
-              className="bg-rosa-500 text-white px-6 py-3 rounded-xl font-semibold
-                hover:bg-rosa-600 active:scale-95 transition-all shadow-lg shadow-rosa-200"
+              className="bg-gradient-to-r from-rosa-500 to-lilas-400 text-white px-6 py-3.5 rounded-2xl font-semibold
+                hover:shadow-lg hover:shadow-rosa-200 active:scale-95 transition-all duration-200
+                shadow-md shadow-rosa-200/50"
             >
               📸 Enviar agenda de hoje
             </button>
           </div>
         ) : (
           agendas.map((agenda) => (
-            <div key={agenda.id} className="mb-6">
-              <h2 className="text-sm font-semibold text-rosa-600 mb-3 px-1">
+            <div key={agenda.id} className="mb-6 animate-slide-up">
+              <h2 className="text-sm font-semibold text-rosa-600 mb-3 px-1 font-[var(--font-nunito)]">
                 {agenda.clinic}
               </h2>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2.5 stagger-children">
                 {agenda.appointments.map((apt) => (
                   <PatientCard
                     key={apt.id}
