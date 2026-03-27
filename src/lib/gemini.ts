@@ -24,7 +24,7 @@ export async function extractAgendaFromImage(
   if (!apiKey) throw new Error("GEMINI_API_KEY não configurada");
 
   const genAI = new GoogleGenerativeAI(apiKey);
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+  const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
   // Remove data URL prefix if present
   const imageData = base64Image.replace(/^data:image\/\w+;base64,/, "");
