@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@theme {
+  --color-rosa-50: #FFF0F5;
+  --color-rosa-100: #FFE0EB;
+  --color-rosa-200: #FFC2D9;
+  --color-rosa-300: #FF99BD;
+  --color-rosa-400: #FF6B9D;
+  --color-rosa-500: #E91E8F;
+  --color-rosa-600: #C4167A;
+  --color-rosa-700: #9E1163;
+  --color-verde: #22C55E;
+  --color-vermelho: #EF4444;
+  --color-amarelo: #F59E0B;
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--color-rosa-50);
+  min-height: 100dvh;
+}
+
+/* PWA safe area */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .nav-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
