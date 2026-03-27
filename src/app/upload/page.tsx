@@ -25,16 +25,43 @@ export default function UploadPage() {
   const cameraInput = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  function handleFile(file: File) {
+  function compressImage(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        const maxWidth = 1400;
+        let { width, height } = img;
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return reject(new Error("Canvas não suportado"));
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL("image/jpeg", 0.7));
+      };
+      img.onerror = () => reject(new Error("Erro ao carregar imagem"));
+      img.src = URL.createObjectURL(file);
+    });
+  }
+
+  async function handleFile(file: File) {
     setError("");
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const result = e.target?.result as string;
-      setImagePreview(result);
-      setImageBase64(result);
-      processImage(result);
-    };
-    reader.readAsDataURL(file);
+    if (file.size > 15 * 1024 * 1024) {
+      setError("Imagem muito grande. Tente uma com menos de 15MB.");
+      return;
+    }
+    try {
+      const compressed = await compressImage(file);
+      setImagePreview(compressed);
+      setImageBase64(compressed);
+      processImage(compressed);
+    } catch {
+      setError("Erro ao processar imagem. Tente outra.");
+    }
   }
 
   async function processImage(base64: string) {

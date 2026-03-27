@@ -4,7 +4,14 @@ import { extractAgendaFromImage } from "@/lib/gemini";
 
 export async function POST(request: NextRequest) {
   try {
-    const { image, date } = await request.json();
+    const body = await request.text();
+    if (body.length > 5 * 1024 * 1024) {
+      return NextResponse.json(
+        { error: "Imagem muito grande. Tente enviar uma foto menor." },
+        { status: 413 }
+      );
+    }
+    const { image, date } = JSON.parse(body);
 
     if (!image || !date) {
       return NextResponse.json(

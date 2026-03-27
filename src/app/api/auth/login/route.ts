@@ -5,16 +5,11 @@ export async function POST(request: NextRequest) {
   try {
     const { pin } = await request.json();
 
-    console.log("PIN recebido:", pin);
-    console.log("HASH do env:", process.env.APP_PIN_HASH);
-
     if (!pin || typeof pin !== "string") {
       return NextResponse.json({ error: "PIN obrigatório" }, { status: 400 });
     }
 
     const valid = await verifyPin(pin);
-    console.log("Resultado compare:", valid);
-
     if (!valid) {
       return NextResponse.json({ error: "PIN incorreto" }, { status: 401 });
     }
