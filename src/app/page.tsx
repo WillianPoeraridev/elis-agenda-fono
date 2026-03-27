@@ -51,14 +51,14 @@ export default function DashboardPage() {
   return (
     <div className="min-h-dvh pb-20">
       {/* Header */}
-      <div className="bg-gradient-to-br from-rosa-500 via-rosa-400 to-lilas-400 text-white px-5 pt-12 pb-6 rounded-b-3xl animate-fade-in">
+      <div className="bg-gradient-to-br from-rosa-500 via-rosa-400 to-lilas-400 text-white px-5 md:px-8 pt-12 pb-6 rounded-b-3xl animate-fade-in">
         <p className="text-white/80 text-sm">Olá, Elis 🌸</p>
         <h1 className="text-xl font-bold mt-1 capitalize font-[var(--font-nunito)]">
           {formatDate(today)}
         </h1>
 
         {allAppointments.length > 0 && (
-          <div className="flex gap-3 mt-4">
+          <div className="flex gap-3 md:gap-5 mt-4">
             <div className="flex items-center gap-1.5 bg-white/20 rounded-full px-3 py-1.5">
               <Check size={14} />
               <span className="text-sm font-semibold">{presentes}</span>
@@ -80,7 +80,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Content */}
-      <div className="px-4 mt-4">
+      <div className="px-4 md:px-6 mt-4">
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 animate-fade-in">
             <div className="dots-loading text-rosa-400 mb-3">
@@ -114,7 +114,7 @@ export default function DashboardPage() {
               <h2 className="text-sm font-semibold text-rosa-600 mb-3 px-1 font-[var(--font-nunito)]">
                 {agenda.clinic}
               </h2>
-              <div className="flex flex-col gap-2.5 stagger-children">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 stagger-children">
                 {agenda.appointments.map((apt) => (
                   <PatientCard
                     key={apt.id}

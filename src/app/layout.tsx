@@ -38,7 +38,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icon-192.png" />
       </head>
       <body className="desktop-bg text-gray-900 antialiased">
-        <div className="mx-auto w-full max-w-md min-h-dvh bg-rosa-50 relative shadow-2xl shadow-rosa-200/50 md:my-0">
+        <div className="mx-auto w-full md:max-w-2xl min-h-dvh bg-rosa-50 relative md:shadow-2xl md:shadow-rosa-200/50">
           {children}
         </div>
       </body>

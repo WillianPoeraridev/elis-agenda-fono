@@ -72,14 +72,14 @@ export default function UploadPage() {
   return (
     <div className="min-h-dvh pb-20">
       {/* Header */}
-      <div className="bg-gradient-to-br from-rosa-500 via-rosa-400 to-lilas-400 text-white px-5 pt-12 pb-6 rounded-b-3xl">
+      <div className="bg-gradient-to-br from-rosa-500 via-rosa-400 to-lilas-400 text-white px-5 md:px-8 pt-12 pb-6 rounded-b-3xl">
         <h1 className="text-xl font-bold font-[var(--font-nunito)]">Enviar Agenda</h1>
         <p className="text-white/80 text-sm mt-1">
           Tire uma foto ou envie da galeria
         </p>
       </div>
 
-      <div className="px-4 mt-4">
+      <div className="px-4 md:px-6 mt-4">
         {/* Date selector */}
         <div className="mb-4 animate-slide-up">
           <label className="text-sm font-medium text-gray-600 block mb-1">
@@ -89,7 +89,7 @@ export default function UploadPage() {
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-2xl border-2 border-rosa-200 bg-white
+            className="w-full md:w-auto md:min-w-64 px-4 py-2.5 rounded-2xl border-2 border-rosa-200 bg-white
               focus:border-rosa-400 focus:ring-4 focus:ring-rosa-200/40 outline-none text-sm transition-all duration-200"
           />
         </div>
@@ -99,7 +99,7 @@ export default function UploadPage() {
           <div className="flex flex-col gap-3 animate-slide-up" style={{ animationDelay: "60ms" }}>
             {imagePreview ? (
               <div className="rounded-2xl overflow-hidden border-2 border-rosa-200 shadow-md">
-                <img src={imagePreview} alt="Preview" className="w-full" />
+                <img src={imagePreview} alt="Preview" className="w-full md:max-h-80 md:object-contain md:mx-auto" />
               </div>
             ) : (
               <div className="rounded-2xl border-2 border-dashed border-rosa-300 bg-rosa-50/50 py-12 flex flex-col items-center justify-center text-center">
@@ -192,9 +192,9 @@ export default function UploadPage() {
                   Pacientes extraídos
                 </h3>
               </div>
-              <div className="divide-y divide-gray-100 stagger-children">
+              <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 divide-gray-100 stagger-children">
                 {extracted.map((apt, i) => (
-                  <div key={i} className="flex items-center gap-3 px-4 py-2.5 animate-slide-up">
+                  <div key={i} className="flex items-center gap-3 px-4 py-2.5 animate-slide-up md:border-b md:border-gray-100">
                     <span className="text-xs font-bold text-rosa-500 w-12">{apt.time}</span>
                     <span className="text-sm text-gray-700">{apt.patientName}</span>
                   </div>
