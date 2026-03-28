@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Users, Check, X, Clock, AlertCircle, RefreshCw } from "lucide-react";
+import { Users, Check, X, Clock, AlertCircle, RefreshCw, LogOut } from "lucide-react";
 import { BottomNav } from "@/components/bottom-nav";
 import { PatientCard } from "@/components/patient-card";
 import { formatDate, toDateString } from "@/lib/utils";
@@ -66,7 +66,19 @@ export default function DashboardPage() {
   return (
     <div className="min-h-dvh pb-20">
       {/* Header */}
-      <div className="bg-gradient-to-br from-rosa-500 via-rosa-400 to-lilas-400 text-white px-5 md:px-8 pt-12 pb-6 rounded-b-3xl animate-fade-in">
+      <div className="bg-gradient-to-br from-rosa-500 via-rosa-400 to-lilas-400 text-white px-5 md:px-8 pt-12 pb-6 rounded-b-3xl animate-fade-in relative">
+        <button
+          onClick={async () => {
+            if (!window.confirm("Deseja sair?")) return;
+            await fetch("/api/auth/logout", { method: "POST" });
+            router.push("/login");
+          }}
+          className="absolute top-4 right-4 p-2 rounded-full text-white/60 hover:text-white hover:bg-white/10
+            transition-all duration-200 active:scale-90"
+          aria-label="Sair"
+        >
+          <LogOut size={16} />
+        </button>
         <p className="text-white/80 text-sm">Olá, Elis 🌸</p>
         <h1 className="text-xl font-bold mt-1 capitalize font-[var(--font-nunito)]">
           {formatDate(today)}
