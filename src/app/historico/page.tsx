@@ -74,7 +74,7 @@ export default function HistoricoPage() {
   // Map agendas by day
   const agendaByDay = new Map<number, AgendaWithStats>();
   agendas.forEach((a) => {
-    const day = new Date(a.date + "T12:00:00").getDate();
+    const day = new Date(a.date).getUTCDate();
     agendaByDay.set(day, a);
   });
 
