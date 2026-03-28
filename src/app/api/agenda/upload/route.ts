@@ -1,64 +1,97 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { extractAgendaFromImage } from "@/lib/gemini";
+
+interface AppointmentInput {
+  time: string;
+  patientName: string;
+}
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.text();
-    if (body.length > 5 * 1024 * 1024) {
-      return NextResponse.json(
-        { error: "Imagem muito grande. Tente enviar uma foto menor." },
-        { status: 413 }
-      );
-    }
-    const { image, date } = JSON.parse(body);
+    const { date, clinic, appointments } = await request.json();
 
-    if (!image || !date) {
+    if (!date || !clinic || !appointments?.length) {
       return NextResponse.json(
-        { error: "Imagem e data são obrigatórios" },
+        { error: "Data, clínica e pacientes são obrigatórios" },
         { status: 400 }
       );
     }
 
-    // Extract agenda from image via Gemini
-    const extracted = await extractAgendaFromImage(image);
-
-    if (extracted.appointments.length === 0) {
-      return NextResponse.json(
-        { error: "Nenhum paciente encontrado na imagem" },
-        { status: 422 }
-      );
-    }
-
-    // Upsert agenda (if already exists for this date+clinic, replace appointments)
-    const clinic = extracted.clinic || "Amar Saúde Tramandaí";
     const agendaDate = new Date(date + "T00:00:00.000Z");
 
-    // Delete existing agenda for this date+clinic if any
-    await prisma.agenda.deleteMany({
+    // Check for existing agenda
+    const existing = await prisma.agenda.findFirst({
       where: { date: agendaDate, clinic },
-    });
-
-    // Create new agenda with appointments
-    const agenda = await prisma.agenda.create({
-      data: {
-        date: agendaDate,
-        clinic,
-        appointments: {
-          create: extracted.appointments.map((apt) => ({
-            time: apt.time,
-            patientName: apt.patientName,
-          })),
-        },
-      },
       include: { appointments: { orderBy: { time: "asc" } } },
     });
 
-    return NextResponse.json({ agenda, extracted });
+    if (!existing) {
+      // No existing agenda — create fresh
+      const agenda = await prisma.agenda.create({
+        data: {
+          date: agendaDate,
+          clinic,
+          appointments: {
+            create: (appointments as AppointmentInput[]).map((apt) => ({
+              time: apt.time.trim(),
+              patientName: apt.patientName.trim(),
+            })),
+          },
+        },
+        include: { appointments: { orderBy: { time: "asc" } } },
+      });
+
+      return NextResponse.json({
+        agenda,
+        summary: { mantidos: 0, novos: appointments.length, total: appointments.length },
+      });
+    }
+
+    // Smart merge with existing agenda
+    const newAppts = appointments as AppointmentInput[];
+    let mantidos = 0;
+    let novos = 0;
+
+    for (const incoming of newAppts) {
+      const timeTrimmed = incoming.time.trim();
+      const nameTrimmed = incoming.patientName.trim().toLowerCase();
+
+      const match = existing.appointments.find(
+        (ex) =>
+          ex.time.trim() === timeTrimmed &&
+          ex.patientName.trim().toLowerCase() === nameTrimmed
+      );
+
+      if (match) {
+        // Already exists — keep it (preserve attended/notes)
+        mantidos++;
+      } else {
+        // New appointment — create it
+        await prisma.appointment.create({
+          data: {
+            agendaId: existing.id,
+            time: timeTrimmed,
+            patientName: incoming.patientName.trim(),
+          },
+        });
+        novos++;
+      }
+    }
+
+    // Reload agenda with all appointments
+    const agenda = await prisma.agenda.findUnique({
+      where: { id: existing.id },
+      include: { appointments: { orderBy: { time: "asc" } } },
+    });
+
+    return NextResponse.json({
+      agenda,
+      summary: { mantidos, novos, total: agenda?.appointments.length || 0 },
+    });
   } catch (error) {
-    console.error("Erro no upload da agenda:", error);
+    console.error("Erro ao salvar agenda:", error);
     return NextResponse.json(
-      { error: (error as Error).message || "Erro ao processar imagem" },
+      { error: (error as Error).message || "Erro ao salvar agenda" },
       { status: 500 }
     );
   }

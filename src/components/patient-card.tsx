@@ -9,9 +9,10 @@ interface PatientCardProps {
   time: string;
   patientName: string;
   attended: boolean | null;
+  onUpdate?: (id: string, attended: boolean | null) => void;
 }
 
-export function PatientCard({ id, time, patientName, attended: initialAttended }: PatientCardProps) {
+export function PatientCard({ id, time, patientName, attended: initialAttended, onUpdate }: PatientCardProps) {
   const [attended, setAttended] = useState<boolean | null>(initialAttended);
   const [loading, setLoading] = useState(false);
   const [tapped, setTapped] = useState<string | null>(null);
@@ -30,6 +31,7 @@ export function PatientCard({ id, time, patientName, attended: initialAttended }
       });
       if (res.ok) {
         setAttended(value);
+        onUpdate?.(id, value);
       }
     } catch (err) {
       console.error("Erro ao atualizar:", err);

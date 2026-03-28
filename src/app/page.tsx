@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Users, Check, X, Clock } from "lucide-react";
 import { BottomNav } from "@/components/bottom-nav";
@@ -42,6 +42,17 @@ export default function DashboardPage() {
       setLoading(false);
     }
   }
+
+  const handleAttendanceUpdate = useCallback((id: string, attended: boolean | null) => {
+    setAgendas((prev) =>
+      prev.map((agenda) => ({
+        ...agenda,
+        appointments: agenda.appointments.map((apt) =>
+          apt.id === id ? { ...apt, attended } : apt
+        ),
+      }))
+    );
+  }, []);
 
   const allAppointments = agendas.flatMap((a) => a.appointments);
   const presentes = allAppointments.filter((a) => a.attended === true).length;
@@ -122,6 +133,7 @@ export default function DashboardPage() {
                     time={apt.time}
                     patientName={apt.patientName}
                     attended={apt.attended}
+                    onUpdate={handleAttendanceUpdate}
                   />
                 ))}
               </div>
