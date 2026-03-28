@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Camera, Calendar } from "lucide-react";
+import { Home, Camera, Users, Calendar } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/", label: "Hoje", icon: Home },
   { href: "/upload", label: "Upload", icon: Camera },
+  { href: "/pacientes", label: "Pacientes", icon: Users },
   { href: "/historico", label: "Histórico", icon: Calendar },
 ];
 
@@ -24,14 +25,14 @@ export function BottomNav() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex flex-col items-center gap-0.5 px-5 py-1.5 rounded-xl transition-all duration-200",
+                "flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all duration-200",
                 isActive
                   ? "text-rosa-500 bg-rosa-100/70"
                   : "text-gray-400 hover:text-rosa-400 active:scale-95"
               )}
             >
-              <item.icon size={22} strokeWidth={isActive ? 2.5 : 2} />
-              <span className="text-[11px] font-semibold">{item.label}</span>
+              <item.icon size={20} strokeWidth={isActive ? 2.5 : 2} />
+              <span className="text-[10px] font-semibold">{item.label}</span>
             </Link>
           );
         })}
