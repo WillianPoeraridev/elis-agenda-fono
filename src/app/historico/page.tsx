@@ -197,6 +197,19 @@ export default function HistoricoPage() {
                     </div>
                   ))}
                 </div>
+
+                <button
+                  onClick={async () => {
+                    if (!window.confirm("Tem certeza? Isso apaga toda a agenda deste dia.")) return;
+                    const dateStr = selectedAgenda.date.split("T")[0];
+                    await fetch(`/api/agenda?date=${dateStr}`, { method: "DELETE" });
+                    setSelectedDay(null);
+                    fetchMonth();
+                  }}
+                  className="block mx-auto mt-3 mb-3 text-xs text-gray-400 underline active:scale-95 transition-all"
+                >
+                  🗑️ Apagar agenda deste dia (teste)
+                </button>
               </div>
             ) : (
               <div className="hidden md:flex items-center justify-center h-full">
