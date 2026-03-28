@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight, Check, X, Clock, AlertCircle, RefreshCw } from "lucide-react";
+import { ChevronLeft, ChevronRight, Check, X, Clock, AlertCircle, RefreshCw, Trash2 } from "lucide-react";
 import { BottomNav } from "@/components/bottom-nav";
 import { cn } from "@/lib/utils";
 
@@ -171,7 +171,7 @@ export default function HistoricoPage() {
                   <h3 className="text-sm font-semibold text-rosa-600 font-[var(--font-nunito)]">
                     {selectedAgenda.clinic}
                   </h3>
-                  <div className="flex gap-2 text-xs">
+                  <div className="flex items-center gap-2 text-xs">
                     <span className="flex items-center gap-1 text-green-600">
                       <Check size={12} /> {selectedAgenda.stats.presentes}
                     </span>
@@ -181,6 +181,19 @@ export default function HistoricoPage() {
                     <span className="flex items-center gap-1 text-amber-500">
                       <Clock size={12} /> {selectedAgenda.stats.pendentes}
                     </span>
+                    <button
+                      onClick={async () => {
+                        if (!window.confirm("Tem certeza? Isso apaga toda a agenda deste dia.")) return;
+                        const dateStr = selectedAgenda.date.split("T")[0];
+                        await fetch(`/api/agenda?date=${dateStr}`, { method: "DELETE" });
+                        setSelectedDay(null);
+                        fetchMonth();
+                      }}
+                      className="ml-1 p-1 rounded text-gray-400 hover:text-red-500 transition-all active:scale-90"
+                      aria-label="Apagar agenda deste dia"
+                    >
+                      <Trash2 size={14} />
+                    </button>
                   </div>
                 </div>
 
@@ -197,19 +210,6 @@ export default function HistoricoPage() {
                     </div>
                   ))}
                 </div>
-
-                <button
-                  onClick={async () => {
-                    if (!window.confirm("Tem certeza? Isso apaga toda a agenda deste dia.")) return;
-                    const dateStr = selectedAgenda.date.split("T")[0];
-                    await fetch(`/api/agenda?date=${dateStr}`, { method: "DELETE" });
-                    setSelectedDay(null);
-                    fetchMonth();
-                  }}
-                  className="block mx-auto mt-3 mb-3 text-xs text-gray-400 underline active:scale-95 transition-all"
-                >
-                  🗑️ Apagar agenda deste dia (teste)
-                </button>
               </div>
             ) : (
               <div className="hidden md:flex items-center justify-center h-full">
