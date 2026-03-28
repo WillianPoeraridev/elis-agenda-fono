@@ -61,17 +61,15 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-dvh flex flex-col items-center justify-center px-6">
-      <div className="text-center mb-14 md:mb-16 animate-slide-up">
+      <div className="text-center mb-8 animate-slide-up">
         <div className="text-7xl md:text-9xl mb-5">🌸</div>
         <h1 className="text-2xl md:text-4xl font-extrabold text-rosa-600 font-[var(--font-nunito)]">
           Agenda Fono
         </h1>
         <p className="text-2xl md:text-3xl text-gray-800 font-bold mt-3">Elis Pinheiro</p>
-        <p className="text-base md:text-lg text-rosa-400 font-medium mt-2">Fonoaudióloga</p>
-        <p className="text-sm md:text-base text-gray-700 mt-1">CRFa 7-11370</p>
       </div>
 
-      <div className="flex gap-4 md:gap-5 mb-6 animate-slide-up" style={{ animationDelay: "100ms" }}>
+      <div className="flex gap-4 md:gap-5 mb-4 animate-slide-up" style={{ animationDelay: "100ms" }}>
         {pin.map((digit, i) => (
           <input
             key={i}
@@ -103,9 +101,11 @@ export default function LoginPage() {
         )}
       </div>
 
-      <p className="text-sm md:text-base text-gray-400 mt-8 animate-fade-in" style={{ animationDelay: "200ms" }}>
-        Digite seu PIN de 4 dígitos
-      </p>
+      <div className="text-center mt-6 animate-fade-in" style={{ animationDelay: "200ms" }}>
+        <p className="text-base md:text-lg text-rosa-400 font-medium">Fonoaudióloga</p>
+        <p className="text-sm md:text-base text-gray-700 mt-1">CRFa 7-11370</p>
+        <p className="text-sm md:text-base text-gray-400 mt-2">Digite seu PIN de 4 dígitos</p>
+      </div>
     </div>
   );
 }
