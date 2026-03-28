@@ -156,25 +156,37 @@ export default function DashboardPage() {
             </button>
           </div>
         ) : (
-          agendas.map((agenda) => (
-            <div key={agenda.id} className="mb-6 animate-slide-up">
-              <h2 className="text-sm font-semibold text-rosa-600 mb-3 px-1 font-[var(--font-nunito)]">
-                {agenda.clinic}
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 stagger-children">
-                {agenda.appointments.map((apt) => (
-                  <PatientCard
-                    key={apt.id}
-                    id={apt.id}
-                    time={apt.time}
-                    patientName={apt.patientName}
-                    attended={apt.attended}
-                    onUpdate={handleAttendanceUpdate}
-                  />
-                ))}
+          <>
+            {agendas.map((agenda) => (
+              <div key={agenda.id} className="mb-6 animate-slide-up">
+                <h2 className="text-sm font-semibold text-rosa-600 mb-3 px-1 font-[var(--font-nunito)]">
+                  {agenda.clinic}
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 stagger-children">
+                  {agenda.appointments.map((apt) => (
+                    <PatientCard
+                      key={apt.id}
+                      id={apt.id}
+                      time={apt.time}
+                      patientName={apt.patientName}
+                      attended={apt.attended}
+                      onUpdate={handleAttendanceUpdate}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-          ))
+            ))}
+            <button
+              onClick={async () => {
+                if (!window.confirm("Tem certeza? Isso apaga toda a agenda de hoje.")) return;
+                await fetch(`/api/agenda?date=${today}`, { method: "DELETE" });
+                fetchAgenda();
+              }}
+              className="block mx-auto mt-2 mb-4 text-xs text-gray-400 underline active:scale-95 transition-all"
+            >
+              🗑️ Limpar agenda de hoje (teste)
+            </button>
+          </>
         )}
       </div>
 

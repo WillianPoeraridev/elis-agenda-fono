@@ -25,3 +25,24 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Erro interno" }, { status: 500 });
   }
 }
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const date = searchParams.get("date");
+
+    if (!date) {
+      return NextResponse.json({ error: "Data obrigatória" }, { status: 400 });
+    }
+
+    const agendaDate = new Date(date + "T00:00:00.000Z");
+    const { count } = await prisma.agenda.deleteMany({
+      where: { date: agendaDate },
+    });
+
+    return NextResponse.json({ deleted: count });
+  } catch (error) {
+    console.error("Erro ao deletar agenda:", error);
+    return NextResponse.json({ error: "Erro interno" }, { status: 500 });
+  }
+}
