@@ -61,13 +61,13 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-dvh flex flex-col items-center justify-center px-6">
-      <div className="text-center mb-12 md:mb-14 animate-slide-up">
+      <div className="text-center mb-14 md:mb-16 animate-slide-up">
         <div className="text-7xl md:text-9xl mb-5">🌸</div>
-        <h1 className="text-3xl md:text-5xl font-extrabold text-rosa-600 font-[var(--font-nunito)]">
+        <h1 className="text-2xl md:text-4xl font-extrabold text-rosa-600 font-[var(--font-nunito)]">
           Agenda Fono
         </h1>
-        <p className="text-2xl md:text-3xl text-gray-800 font-bold mt-2">Elis Pinheiro</p>
-        <p className="text-base md:text-lg text-rosa-400 font-medium uppercase mt-1">Fonoaudióloga</p>
+        <p className="text-2xl md:text-3xl text-gray-800 font-bold mt-3">Elis Pinheiro</p>
+        <p className="text-base md:text-lg text-rosa-400 font-medium mt-2">Fonoaudióloga</p>
         <p className="text-sm md:text-base text-gray-700 mt-1">CRFa 7-11370</p>
       </div>
 
