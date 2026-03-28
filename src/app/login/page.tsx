@@ -101,10 +101,13 @@ export default function LoginPage() {
         )}
       </div>
 
-      <div className="text-center mt-6 animate-fade-in" style={{ animationDelay: "200ms" }}>
+      <p className="text-sm md:text-base text-gray-400 mt-4 animate-fade-in" style={{ animationDelay: "200ms" }}>
+        Digite seu PIN de 4 dígitos
+      </p>
+
+      <div className="text-center mt-8 animate-fade-in" style={{ animationDelay: "300ms" }}>
         <p className="text-base md:text-lg text-rosa-400 font-medium">Fonoaudióloga</p>
         <p className="text-sm md:text-base text-gray-700 mt-1">CRFa 7-11370</p>
-        <p className="text-sm md:text-base text-gray-400 mt-2">Digite seu PIN de 4 dígitos</p>
       </div>
     </div>
   );
