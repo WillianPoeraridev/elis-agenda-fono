@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
     // Smart merge with existing agenda
     const newAppts = appointments as AppointmentInput[];
     let mantidos = 0;
-    let novos = 0;
+    const novosParaCriar: { agendaId: string; time: string; patientName: string }[] = [];
 
     for (const incoming of newAppts) {
       const timeTrimmed = incoming.time.trim();
@@ -63,26 +63,26 @@ export async function POST(request: NextRequest) {
       );
 
       if (match) {
-        // Already exists — keep it (preserve attended/notes)
         mantidos++;
       } else {
-        // New appointment — create it
-        await prisma.appointment.create({
-          data: {
-            agendaId: existing.id,
-            time: timeTrimmed,
-            patientName: incoming.patientName.trim(),
-          },
+        novosParaCriar.push({
+          agendaId: existing.id,
+          time: timeTrimmed,
+          patientName: incoming.patientName.trim(),
         });
-        novos++;
       }
     }
 
-    // Reload agenda with all appointments
+    if (novosParaCriar.length > 0) {
+      await prisma.appointment.createMany({ data: novosParaCriar });
+    }
+
     const agenda = await prisma.agenda.findUnique({
       where: { id: existing.id },
       include: { appointments: { orderBy: { time: "asc" } } },
     });
+
+    const novos = novosParaCriar.length;
 
     return NextResponse.json({
       agenda,
