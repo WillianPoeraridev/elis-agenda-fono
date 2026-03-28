@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight, Check, X, Clock } from "lucide-react";
+import { ChevronLeft, ChevronRight, Check, X, Clock, AlertCircle, RefreshCw } from "lucide-react";
 import { BottomNav } from "@/components/bottom-nav";
 import { cn } from "@/lib/utils";
 
@@ -30,6 +30,7 @@ export default function HistoricoPage() {
   const [agendas, setAgendas] = useState<AgendaWithStats[]>([]);
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -41,12 +42,14 @@ export default function HistoricoPage() {
 
   async function fetchMonth() {
     setLoading(true);
+    setError(false);
     try {
       const res = await fetch(`/api/historico?month=${monthStr}`);
+      if (!res.ok) throw new Error();
       const data = await res.json();
       setAgendas(data.agendas || []);
-    } catch (err) {
-      console.error("Erro:", err);
+    } catch {
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -203,7 +206,29 @@ export default function HistoricoPage() {
           </div>
         </div>
 
-        {!loading && agendas.length === 0 && (
+        {!loading && error && (
+          <div className="flex flex-col items-center justify-center py-12 text-center animate-slide-up">
+            <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center mb-4">
+              <AlertCircle size={28} className="text-red-400" />
+            </div>
+            <h2 className="text-base font-semibold text-gray-700 font-[var(--font-nunito)]">
+              Não foi possível carregar o histórico
+            </h2>
+            <p className="text-sm text-gray-400 mt-1 mb-5">
+              Verifique sua conexão e tente novamente
+            </p>
+            <button
+              onClick={fetchMonth}
+              className="flex items-center gap-2 bg-white text-rosa-500 border-2 border-rosa-200 px-5 py-2.5 rounded-2xl
+                font-semibold active:scale-95 transition-all duration-200 hover:shadow-md"
+            >
+              <RefreshCw size={16} />
+              Tentar novamente
+            </button>
+          </div>
+        )}
+
+        {!loading && !error && agendas.length === 0 && (
           <div className="text-center py-10 animate-fade-in">
             <div className="w-16 h-16 rounded-full bg-rosa-100 flex items-center justify-center mx-auto mb-4">
               <span className="text-2xl">📅</span>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Users, Check, X, Clock } from "lucide-react";
+import { Users, Check, X, Clock, AlertCircle, RefreshCw } from "lucide-react";
 import { BottomNav } from "@/components/bottom-nav";
 import { PatientCard } from "@/components/patient-card";
 import { formatDate, toDateString } from "@/lib/utils";
@@ -24,6 +24,7 @@ interface Agenda {
 export default function DashboardPage() {
   const [agendas, setAgendas] = useState<Agenda[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const router = useRouter();
   const today = toDateString();
 
@@ -32,12 +33,15 @@ export default function DashboardPage() {
   }, []);
 
   async function fetchAgenda() {
+    setLoading(true);
+    setError(false);
     try {
       const res = await fetch(`/api/agenda?date=${today}`);
+      if (!res.ok) throw new Error();
       const data = await res.json();
       setAgendas(data.agendas || []);
-    } catch (err) {
-      console.error("Erro ao carregar agenda:", err);
+    } catch {
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -98,6 +102,26 @@ export default function DashboardPage() {
               <span /><span /><span />
             </div>
             <p className="text-sm text-gray-400">Carregando agenda...</p>
+          </div>
+        ) : error ? (
+          <div className="flex flex-col items-center justify-center py-16 text-center animate-slide-up">
+            <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center mb-4">
+              <AlertCircle size={28} className="text-red-400" />
+            </div>
+            <h2 className="text-lg font-semibold text-gray-700 font-[var(--font-nunito)]">
+              Não foi possível carregar a agenda
+            </h2>
+            <p className="text-sm text-gray-400 mt-1 mb-6">
+              Verifique sua conexão e tente novamente
+            </p>
+            <button
+              onClick={fetchAgenda}
+              className="flex items-center gap-2 bg-white text-rosa-500 border-2 border-rosa-200 px-5 py-2.5 rounded-2xl
+                font-semibold active:scale-95 transition-all duration-200 hover:shadow-md"
+            >
+              <RefreshCw size={16} />
+              Tentar novamente
+            </button>
           </div>
         ) : agendas.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center animate-slide-up">
