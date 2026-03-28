@@ -40,7 +40,7 @@ export default function RootLayout({
       </head>
       <body className="desktop-bg text-gray-900 antialiased">
         <ServiceWorkerRegister />
-        <div className="mx-auto w-full md:max-w-2xl min-h-dvh bg-rosa-50 relative md:shadow-2xl md:shadow-rosa-200/50">
+        <div className="mx-auto w-full md:max-w-4xl min-h-dvh bg-rosa-50 relative md:shadow-2xl md:shadow-rosa-200/50">
           {children}
         </div>
       </body>
