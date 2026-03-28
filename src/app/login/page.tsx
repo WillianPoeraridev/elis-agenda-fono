@@ -66,8 +66,9 @@ export default function LoginPage() {
         <h1 className="text-3xl md:text-5xl font-extrabold text-rosa-600 font-[var(--font-nunito)]">
           Agenda Fono
         </h1>
-        <p className="text-lg md:text-2xl text-rosa-400 font-medium mt-2">Elis Pinheiro</p>
-        <p className="text-sm md:text-base text-rosa-300 tracking-wider uppercase mt-1">Fonoaudióloga</p>
+        <p className="text-2xl md:text-3xl text-gray-800 font-bold mt-2">Elis Pinheiro</p>
+        <p className="text-base md:text-lg text-rosa-400 font-medium uppercase mt-1">Fonoaudióloga</p>
+        <p className="text-sm md:text-base text-gray-700 mt-1">CRFa 7-11370</p>
       </div>
 
       <div className="flex gap-4 md:gap-5 mb-6 animate-slide-up" style={{ animationDelay: "100ms" }}>
